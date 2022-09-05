@@ -39,12 +39,14 @@ namespace Elsa.Samples.DocumentApproval
                                 fork2
                                     .When("Approve")
                                     .SignalReceived("Approve:Jack")
+                                    .WriteLine("Jack Approved")
                                     .SetVariable("Approved", context => context.SetVariable<int>("Approved", approved => approved == 0 ? 1 : approved))
                                     .ThenNamed("JoinJack");
 
                                 fork2
                                     .When("Reject")
                                     .SignalReceived("Reject:Jack")
+                                    .WriteLine("Jack Rejected")
                                     .SetVariable<int>("Approved", 2)
                                     .ThenNamed("JoinJack");
                             }).WithName("ForkJack")
@@ -59,12 +61,14 @@ namespace Elsa.Samples.DocumentApproval
                                     fork2
                                         .When("Approve")
                                         .SignalReceived("Approve:Lucy")
+                                        .WriteLine("Lucy Approve")
                                         .SetVariable("Approved", context => context.SetVariable<int>("Approved", approved => approved == 0 ? 1 : approved))
                                         .ThenNamed("JoinLucy");
 
                                     fork2
                                         .When("Reject")
                                         .SignalReceived("Reject:Lucy")
+                                        .WriteLine("Lucy Reject")
                                         .SetVariable<int>("Approved", 2)
                                         .ThenNamed("JoinLucy");
                                 }).WithName("ForkLucy")
@@ -72,7 +76,7 @@ namespace Elsa.Samples.DocumentApproval
                             .ThenNamed("JoinJackLucy");
                     }
                 )
-                .Add<Join>(x => x.WithMode(Join.JoinMode.WaitAll)).WithName("JoinJackLucy")
+                .Add<Join>(x => x.WithMode(Join.JoinMode.WaitAll)).WithName("JoinJackLucy")// wait all Approved or Rejected then to branch JoinJackLucy
                 .WriteLine(context => $"Approved: {context.GetVariable<int>("Approved")}").WithName("AfterJoinJackLucy")
                 .If(context => context.GetVariable<int>("Approved") == 1, @if =>
                 {
