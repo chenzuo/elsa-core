@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using Elsa.Activities.Console;
+using Elsa.Activities.Http.Extensions;
 using Elsa.Activities.ControlFlow;
 using Elsa.Activities.Http;
 using Elsa.Builders;
@@ -18,7 +19,8 @@ namespace Elsa.Samples.NestedForks.Workflows
                     .WithMethod(HttpMethod.Get.Method))
                 .WriteHttpResponse(http => http
                     .WithStatusCode(HttpStatusCode.OK)
-                    .WithContent(context => context.WorkflowInstance.Id))
+                    .WithContent(context => $"{context.WorkflowInstance.Id}<br/>{context.GenerateSignalUrl("ChildOneSuccess")}<br/><br/>{context.GenerateSignalUrl("ChildTwoFailed")}")
+                    .WithContentType("text/html"))
                 .Then<Fork>(activity => activity.WithBranches("ChildOne", "ChildTwo"), fork =>
                 {
                     fork

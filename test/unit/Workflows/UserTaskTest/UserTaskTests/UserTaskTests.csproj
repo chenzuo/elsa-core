@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0"/>
+    <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+   <PackageReference Include="coverlet.collector" Version="3.1.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\src\activities\Elsa.Activities.Console\Elsa.Activities.Console.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\activities\Elsa.Activities.Entity\Elsa.Activities.Entity.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\activities\Elsa.Activities.Rebus\Elsa.Activities.Rebus.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\activities\Elsa.Activities.Sql\Elsa.Activities.Sql.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\activities\Elsa.Activities.UserTask\Elsa.Activities.UserTask.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\caching\Elsa.Caching.Rebus\Elsa.Caching.Rebus.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\core\Elsa.Abstractions\Elsa.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\core\Elsa.Core\Elsa.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\core\Elsa\Elsa.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\indexing\Elsa.Indexing.Abstractions\Elsa.Indexing.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\modules\retention\Elsa.Retention\Elsa.Retention.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\persistence\Elsa.Persistence.EntityFramework\Elsa.Persistence.EntityFramework.Core\Elsa.Persistence.EntityFramework.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\persistence\Elsa.Persistence.EntityFramework\Elsa.Persistence.EntityFramework.Sqlite\Elsa.Persistence.EntityFramework.Sqlite.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\providers\Elsa.Providers.Redis\Elsa.Providers.Redis.csproj" />
+  </ItemGroup>
+
+</Project>
