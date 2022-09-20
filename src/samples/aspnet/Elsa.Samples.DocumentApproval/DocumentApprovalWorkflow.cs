@@ -29,10 +29,13 @@ namespace Elsa.Samples.DocumentApproval
                     .WithContentType("text/html")
                     .WithStatusCode(HttpStatusCode.OK).WithResponseHeaders(new HttpResponseHeaders { ["X-Powered-By"] = "Elsa Workflows" })
                 )
+                .WriteLine(context => $"Jack Req url: \n {context.GenerateSignalUrl("Jack:Req")}")
+                .WriteLine(context => $"Lucy Req url: \n {context.GenerateSignalUrl("Lucy:Req")}")
                 .Then<Fork>(fork1 => fork1.WithBranches("Jack", "Lucy"), fork1 =>
                     {
                         fork1
                             .When("Jack")
+                            .SignalReceived("Jack:Req")
                             .WriteLine(context => $"Jack approve url: \n {context.GenerateSignalUrl("Approve:Jack")}")
                             .Then<Fork>(fork2 => fork2.WithBranches("Approve", "Reject"), fork2 =>
                             {
@@ -54,6 +57,7 @@ namespace Elsa.Samples.DocumentApproval
                             .ThenNamed("JoinJackLucy");
 
                         fork1.When("Lucy")
+                        .SignalReceived("Lucy:Req")
                             .WriteLine(context => $"Lucy approve url: \n {context.GenerateSignalUrl("Approve:Lucy")}")
                             .Then<Fork>(fork2 => fork2.WithBranches("Approve", "Reject"),
                                 fork2 =>
