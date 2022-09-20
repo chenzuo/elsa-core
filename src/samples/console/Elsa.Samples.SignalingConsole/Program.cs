@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Elsa.Activities.Signaling.Services;
 using Elsa.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Elsa.Samples.SignalingConsole
 {
@@ -15,6 +16,7 @@ namespace Elsa.Samples.SignalingConsole
         {
             // Create a service container with Elsa services.
             var services = new ServiceCollection()
+            .AddLogging(configure => configure.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Information))
                 .AddElsa(options => options
                     .AddConsoleActivities()
                     .AddWorkflowsFrom<SignalReceiverWorkflow>())
@@ -24,25 +26,25 @@ namespace Elsa.Samples.SignalingConsole
             var startupRunner = services.GetRequiredService<IStartupRunner>();
             await startupRunner.StartupAsync();
             
-            Console.WriteLine("Press enter to send a signal from a workflow:");
-            Console.ReadLine();
+            // Console.WriteLine("Press enter to send a signal from a workflow:");
+            // Console.ReadLine();
             
             // Get a workflow runner.
             var workflowRunner = services.GetRequiredService<IBuildsAndStartsWorkflow>();
             
             // This workflow will send a signal, which will be handled by the `SignalReceiverWorkflow`.
-            await workflowRunner.BuildAndStartWorkflowAsync<SignalSenderWorkflow>();
+            await workflowRunner.BuildAndStartWorkflowAsync<SignalReceiverWorkflow>();
             
             // We can also trigger a signal manually:
-            Console.WriteLine();
-            Console.WriteLine("Press enter again to send a signal manually:");
-            Console.ReadLine();
+            // Console.WriteLine();
+            // Console.WriteLine("Press enter again to send a signal manually:");
+            // Console.ReadLine();
             
             var signaler = services.GetRequiredService<ISignaler>();
             await signaler.TriggerSignalAsync("Demo Signal");
 
             // Keep the application alive for the workflow scheduler to have enough time to resume the workflow. 
-            Console.ReadLine();
+            // Console.ReadLine();
         }
     }
 }

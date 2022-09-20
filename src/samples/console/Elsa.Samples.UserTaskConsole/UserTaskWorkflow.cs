@@ -1,6 +1,8 @@
 using Elsa.Activities.Console;
 using Elsa.Builders;
 using Elsa.Activities.UserTask.Activities;
+using Elsa.Activities.Primitives;
+using Elsa.Activities.ControlFlow;
 
 namespace Elsa.Samples.UserTaskConsole
 {
@@ -9,24 +11,28 @@ namespace Elsa.Samples.UserTaskConsole
         public void Build(IWorkflowBuilder workflow)
         {
             workflow
-                .WriteLine("Workflow started. Waiting for user action.").WithName("Start")
+                .WriteLine("Workflow started. Waiting for user action.")
+                .WithName("Start")
                 .Then<UserTask>(
                     activity => activity.Set(x => x.Actions, new[] { "Accept", "Reject", "Needs Work" }),
                     userTask =>
                     {
+                        // userTask.WriteLine(context => $"Jack approve url: \n {context.GetVariable<string>("MyVariable")}");
                         userTask
                             .When("Accept")
-                            .WriteLine("Great! Your work has been accepted.")
+                            .WriteLine(context => $"Great! Your work has been accepted.")
                             .ThenNamed("Exit");
 
                         userTask
                             .When("Reject")
-                            .WriteLine("Sorry! Your work has been rejected.")
+                            // .SignalReceived("Reject")
+                            .WriteLine(context => $"Sorry! Your work has been rejected.")
                             .ThenNamed("Exit");
-                        
+
                         userTask
                             .When("Needs Work")
-                            .WriteLine("So close! Your work needs a little bit more work.")
+                            // .SignalReceived("Needs Work")
+                            .WriteLine(context => $"So close! Your work needs a little bit more work.")
                             .ThenNamed("Exit");
                     }
                 )

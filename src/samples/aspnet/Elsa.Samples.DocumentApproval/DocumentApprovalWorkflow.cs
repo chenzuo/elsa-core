@@ -33,6 +33,7 @@ namespace Elsa.Samples.DocumentApproval
                     {
                         fork1
                             .When("Jack")
+                            .SignalReceived("Jack")
                             .WriteLine(context => $"Jack approve url: \n {context.GenerateSignalUrl("Approve:Jack")}")
                             .Then<Fork>(fork2 => fork2.WithBranches("Approve", "Reject"), fork2 =>
                             {
@@ -54,6 +55,7 @@ namespace Elsa.Samples.DocumentApproval
                             .ThenNamed("JoinJackLucy");
 
                         fork1.When("Lucy")
+                        .SignalReceived("Jack")
                             .WriteLine(context => $"Lucy approve url: \n {context.GenerateSignalUrl("Approve:Lucy")}")
                             .Then<Fork>(fork2 => fork2.WithBranches("Approve", "Reject"),
                                 fork2 =>

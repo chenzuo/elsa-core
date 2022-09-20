@@ -19,14 +19,20 @@ namespace Elsa.Samples.NestedForks.Workflows
                     .WithMethod(HttpMethod.Get.Method))
                 .WriteHttpResponse(http => http
                     .WithStatusCode(HttpStatusCode.OK)
-                    .WithContent(context => $"{context.WorkflowInstance.Id}<br/>{context.GenerateSignalUrl("ChildOneSuccess")}<br/><br/>{context.GenerateSignalUrl("ChildTwoFailed")}")
+                    .WithContent(context => $"{context.WorkflowInstance.Id}<br/>{context.GenerateSignalUrl("ChildOne")}<br/><br/>{context.GenerateSignalUrl("ChildTwo")}")
                     .WithContentType("text/html"))
                 .Then<Fork>(activity => activity.WithBranches("ChildOne", "ChildTwo"), fork =>
                 {
                     fork
                         .When("ChildOne")
+                        .SignalReceived("ChildOne")
                         .Then<Fork>(activity => activity.WithBranches("ChildOneSuccess", "ChildOneFailed"), childOneFork =>
                         {
+                            childOneFork.WriteHttpResponse(http => http
+                                    .WithStatusCode(HttpStatusCode.OK)
+                                    .WithContent(context => $"{context.WorkflowInstance.Id}<br/>{context.GenerateSignalUrl("ChildOneSuccess")}<br/><br/>{context.GenerateSignalUrl("ChildOneFailed")}")
+                                    .WithContentType("text/html"));
+
                             childOneFork.When("ChildOneSuccess")
                                 .SignalReceived("ChildOneSuccess")
                                 .WriteHttpResponse(http => http
@@ -44,6 +50,7 @@ namespace Elsa.Samples.NestedForks.Workflows
 
                     fork
                         .When("ChildTwo")
+                        .SignalReceived("ChildTwo")
                         .Then<Fork>(activity => activity.WithBranches("ChildTwoSuccess", "ChildTwoFailed"), childTwoFork =>
                         {
                             childTwoFork

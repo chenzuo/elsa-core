@@ -23,6 +23,8 @@ namespace UserTaskTests
                 {
                     foreach (var user in users)
                         fork.When(user)
+                        .SignalReceived(user)
+                        .WriteLine(context=>$"{context.GetVariable<string>("MyVariable")}")
                             .WriteLine("A fork created for " + user)
                             .ThenNamed("Join1");
                 })
