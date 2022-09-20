@@ -30,6 +30,7 @@ namespace Elsa.Samples.DocumentApproval
                     .WithStatusCode(HttpStatusCode.OK).WithResponseHeaders(new HttpResponseHeaders { ["X-Powered-By"] = "Elsa Workflows" })
                 )
                 .WriteLine(context => $"Jack Req url: \n {context.GenerateSignalUrl("Jack:Req")}")
+                .WriteLine(context => $"Approve Jack url: \n {context.GenerateSignalUrl("Approve:Jack")}")
                 .WriteLine(context => $"Lucy Req url: \n {context.GenerateSignalUrl("Lucy:Req")}")
                 .Then<Fork>(fork1 => fork1.WithBranches("Jack", "Lucy"), fork1 =>
                     {
